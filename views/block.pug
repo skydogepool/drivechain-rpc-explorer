@@ -256,8 +256,9 @@ block content
 						| Transaction details unavailable due to blockchain pruning
 						
 				else
-					+contentSection(`${txCount.toLocaleString()} Transaction${txCount == 1 ? "" : "s"}`, false, "blockPageShowTxDetails", true, false)
-						+txList(result.transactions, txCount, limit, offset, result.txInputsByTransaction, {sharedBlockHeight: result.getblock.height, hidePagination:crawlerBot})
+					if (txCount)
+						+contentSection(`${txCount.toLocaleString()} Transaction${txCount == 1 ? "" : "s"}`, false, "blockPageShowTxDetails", true, false)
+							+txList(result.transactions, txCount, limit, offset, result.txInputsByTransaction, {sharedBlockHeight: result.getblock.height, hidePagination:crawlerBot})
 						
 									
 							
