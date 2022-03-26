@@ -103,7 +103,7 @@ global.appVersion = package_json.version;
 global.cacheId = global.appVersion;
 debugLog(`Default cacheId '${global.cacheId}'`);
 
-global.btcNodeSemver = "0.0.0";
+global.btcNodeSemver = "0.16.99";
 
 
 const baseActionsRouter = require('./routes/baseRouter.js');
@@ -346,50 +346,8 @@ async function onRpcConnectionVerified(getnetworkinfo, getblockchaininfo) {
 		global.prunedBlockchain = true;
 		global.pruneHeight = getblockchaininfo.pruneheight;
 	}
-
-	var bitcoinCoreVersionRegex = /^.*\/Satoshi\:(.*)\/.*$/;
-
-	var match = bitcoinCoreVersionRegex.exec(getnetworkinfo.subversion);
-	if (match) {
-		global.btcNodeVersion = match[1];
-
-		var semver4PartRegex = /^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$/;
-
-		var semver4PartMatch = semver4PartRegex.exec(global.btcNodeVersion);
-		if (semver4PartMatch) {
-			var p0 = semver4PartMatch[1];
-			var p1 = semver4PartMatch[2];
-			var p2 = semver4PartMatch[3];
-			var p3 = semver4PartMatch[4];
-
-			// drop last segment, which usually indicates a bug fix release which is (hopefully) irrelevant for RPC API versioning concerns
-			global.btcNodeSemver = `${p0}.${p1}.${p2}`;
-
-		} else {
-			var semver3PartRegex = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/;
-
-			var semver3PartMatch = semver3PartRegex.exec(global.btcNodeVersion);
-			if (semver3PartMatch) {
-				var p0 = semver3PartMatch[1];
-				var p1 = semver3PartMatch[2];
-				var p2 = semver3PartMatch[3];
-
-				global.btcNodeSemver = `${p0}.${p1}.${p2}`;
-
-			} else {
-				// short-circuit: force all RPC calls to pass their version checks - this will likely lead to errors / instability / unexpected results
-				global.btcNodeSemver = "1000.1000.0"
-			}
-		}
-	} else {
-		// short-circuit: force all RPC calls to pass their version checks - this will likely lead to errors / instability / unexpected results
-		global.btcNodeSemver = "1000.1000.0"
-
-		debugErrorLog(`Unable to parse node version string: ${getnetworkinfo.subversion} - RPC versioning will likely be unreliable. Is your node a version of Bitcoin Core?`);
-	}
 	
 	debugLog(`RPC Connected: version=${getnetworkinfo.version} subversion=${getnetworkinfo.subversion}, parsedVersion(used for RPC versioning)=${global.btcNodeSemver}, protocolversion=${getnetworkinfo.protocolversion}, chain=${getblockchaininfo.chain}, services=${services}`);
-
 	
 	// load historical/fun items for this chain
 	loadHistoricalDataForChain(global.activeBlockchain);

@@ -147,8 +147,8 @@
 							else
 								span.badge.bg-secondary Unknown
 
-						
-						td.text-end #{block.nTx.toLocaleString()}
+						if (block.ntx)
+							td.text-end #{block.nTx.toLocaleString()}
 
 						if (blockstatsByHeight)
 							td.text-end.d-none.d-lg-table-cell
