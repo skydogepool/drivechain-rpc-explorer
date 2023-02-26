@@ -1,3 +1,8 @@
+# Moved to LayerTwo-Labs
+The current version of the software can be found here: https://github.com/LayerTwo-Labs
+
+
+
 # BTC RPC Explorer
 
 ## Self-Hosted Bitcoin explorer for everyone running [Bitcoin Core](https://github.com/bitcoin/bitcoin).
